@@ -1,4 +1,4 @@
-import sappersIcon from "../../assets/sappers-icon.svg";
+import sappersIcon from "../../assets/sappper-logo.png";
 
 interface LogoProps {
   className?: string;

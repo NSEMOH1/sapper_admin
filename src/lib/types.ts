@@ -41,8 +41,9 @@ export interface LoansResponse {
 }
 
 export interface SavingsResponse {
-  savings: any;
-  result: Savings[];
+  success: boolean;
+  savings: Savings[];
+  total: number;
 }
 
 export interface Savings {
@@ -50,14 +51,14 @@ export interface Savings {
   category: {
     name: string;
   };
-  status: string
+  status: string;
   amount: string;
   createdAt: string;
   member: {
     first_name: string;
     last_name: string;
-    email: string
-    phone: string
+    email: string;
+    phone: string;
   };
   reference: string;
 }

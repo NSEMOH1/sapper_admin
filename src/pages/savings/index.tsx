@@ -6,8 +6,19 @@ import { fetchSavings } from "../../api/savings";
 import type { Savings, SavingsResponse } from "../../lib/types";
 import Loader from "../../components/loader";
 
+interface FormattedSavings {
+  id: string | number;
+  name: string;
+  serviceNumber: string;
+  email: string;
+  phone: string;
+  savingsType: string;
+  amount: number;
+}
+
 const Savings = () => {
-  const [savings, setSavings] = useState<Savings[]>([]);
+  const [savings, setSavings] = useState<FormattedSavings[]>([]);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -15,16 +26,22 @@ const Savings = () => {
     const loadSavings = async () => {
       try {
         const response: SavingsResponse = await fetchSavings();
+
         const formattedSavings = response.savings.map((saving: Savings) => ({
           id: saving.id,
-          name: saving.member?.first_name || "N/A",
+          name:
+            `${saving.member?.first_name || ""} ${
+              saving.member?.last_name || ""
+            }`.trim() || "N/A",
           serviceNumber: saving.reference || "N/A",
           email: saving.member?.email || "N/A",
           phone: saving.member?.phone || "N/A",
-          savingsType: saving.category || "Normal",
-          amount: saving.amount,
+          savingsType: saving.category?.name || "Normal",
+          amount: parseFloat(saving.amount) || 0,
         }));
+
         setSavings(formattedSavings);
+        setTotalAmount(response.total || 0);
       } catch (error) {
         console.error("Error fetching savings:", error);
         setError("Failed to load savings.");
@@ -47,7 +64,7 @@ const Savings = () => {
   const savingsColumns = [
     {
       title: "Name",
-      dataIndex: "name",
+      dataIndex: "name" as const,
       key: "name",
       render: (name: string) => (
         <span className="flex items-center gap-2 font-medium">
@@ -57,22 +74,22 @@ const Savings = () => {
     },
     {
       title: "Service Number",
-      dataIndex: "serviceNumber",
+      dataIndex: "serviceNumber" as const,
       key: "serviceNumber",
     },
     {
       title: "Email",
-      dataIndex: "email",
+      dataIndex: "email" as const,
       key: "email",
     },
     {
       title: "Phone",
-      dataIndex: "phone",
+      dataIndex: "phone" as const,
       key: "phone",
     },
     {
       title: "Savings Type",
-      dataIndex: "savingsType",
+      dataIndex: "savingsType" as const,
       key: "savingsType",
       render: (type: string) => (
         <Badge
@@ -87,7 +104,7 @@ const Savings = () => {
     },
     {
       title: "Amount",
-      dataIndex: "amount",
+      dataIndex: "amount" as const,
       key: "amount",
       render: (amount: number) => (
         <span className="font-semibold">₦{amount.toLocaleString()}</span>
@@ -102,7 +119,9 @@ const Savings = () => {
           <div className="flex justify-between items-center gap-6">
             <div>
               <p className="text-sm text-gray-600">Total Savings</p>
-              <p className="text-2xl font-bold">₦{}</p>
+              <p className="text-2xl font-bold">
+                ₦{totalAmount.toLocaleString()}
+              </p>
             </div>
             <div
               className="p-2 rounded-lg transition-transform duration-300 hover:scale-110"
@@ -113,7 +132,7 @@ const Savings = () => {
           </div>
           <p className="flex items-center gap-2 pt-4 text-sm text-gray-500">
             <TrendingUpDownIcon size={16} color="#38A169" />
-            <p>20% from yesterday</p>
+            <p>from yesterday</p>
           </p>
         </CardBody>
       </Card>

@@ -8,31 +8,39 @@ const Dashboard = lazy(() => import("../pages/dashboard/index.tsx"));
 const Login = lazy(() => import("../pages/auth/login/index.tsx"));
 const Register = lazy(() => import("../pages/auth/register/index.tsx"));
 const Members = lazy(() => import("../pages/members/index.tsx"));
-const Loan = lazy(() => import("../pages/loan/index.tsx"))
-const Request = lazy(() => import("../pages/request/index.tsx"))
-const Termination = lazy(() => import("../pages/termination/index.tsx"))
-const Uploads = lazy(() => import("../pages/upload/index.tsx"))
-const AccountManagement = lazy(() => import("../pages/account-management/index.tsx"))
+const Loan = lazy(() => import("../pages/loan/index.tsx"));
+const Request = lazy(() => import("../pages/request/index.tsx"));
+const Termination = lazy(() => import("../pages/termination/index.tsx"));
+const Uploads = lazy(() => import("../pages/upload/index.tsx"));
+const AccountManagement = lazy(
+  () => import("../pages/account-management/index.tsx")
+);
 const Reports = lazy(() => import("../pages/report/index.tsx"));
-const MonthlyDeductionReport = lazy(() => import("../pages/report/deduction/index.tsx"))
-const DividendReport = lazy(() => import("../pages/report/dividend/index.tsx"))
-const FinancialReport = lazy(() => import("../pages/report/financial/index.tsx"))
-const InterestReport = lazy(() => import("../pages/report/interest/index.tsx"))
-const IPPIS = lazy(() => import("../pages/report/ippis/index.tsx"))
-const LoanRepaymentReport = lazy(() => import("../pages/report/repayment/index.tsx"))
-const Savings = lazy(() => import("../pages/savings/index.tsx"))
+const MonthlyDeductionReport = lazy(
+  () => import("../pages/report/deduction/index.tsx")
+);
+const DividendReport = lazy(() => import("../pages/report/dividend/index.tsx"));
+const FinancialReport = lazy(
+  () => import("../pages/report/financial/index.tsx")
+);
+const InterestReport = lazy(() => import("../pages/report/interest/index.tsx"));
+const IPPIS = lazy(() => import("../pages/report/ippis/index.tsx"));
+const LoanRepaymentReport = lazy(
+  () => import("../pages/report/repayment/index.tsx")
+);
+const Savings = lazy(() => import("../pages/savings/index.tsx"));
 const Unauthorized = lazy(() => import("../pages/unauthorized/index.tsx"));
 
 const ROUTE_PERMISSIONS = {
-  dashboard: [UserRole.STAFF, UserRole.ADMIN, UserRole.SUPER_ADMIN],
-  members: [UserRole.STAFF, UserRole.ADMIN, UserRole.SUPER_ADMIN],
-  loans:  [UserRole.SUPER_ADMIN],
-  request: [UserRole.STAFF, UserRole.ADMIN, UserRole.SUPER_ADMIN],
-  termination: [UserRole.STAFF, UserRole.ADMIN, UserRole.SUPER_ADMIN],
-  uploads: [UserRole.STAFF, UserRole.ADMIN, UserRole.SUPER_ADMIN],
-  accountmanagement: [UserRole.ADMIN, UserRole.SUPER_ADMIN],
-  report: [UserRole.ADMIN, UserRole.SUPER_ADMIN],
-  savings: [UserRole.ADMIN, UserRole.SUPER_ADMIN]
+  dashboard: [UserRole.STAFF, UserRole.ADMIN],
+  members: [UserRole.STAFF, UserRole.ADMIN],
+  loans: [UserRole.ADMIN],
+  request: [UserRole.STAFF, UserRole.ADMIN],
+  termination: [UserRole.STAFF, UserRole.ADMIN],
+  uploads: [UserRole.STAFF, UserRole.ADMIN],
+  accountmanagement: [UserRole.ADMIN],
+  report: [UserRole.ADMIN],
+  savings: [UserRole.ADMIN],
 };
 
 export const sappersRoutes = () => {

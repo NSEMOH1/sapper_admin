@@ -114,7 +114,6 @@ export default function MembersTable() {
       ID: member.id,
       "First Name": member.first_name,
       "Last Name": member.last_name,
-      Rank: member.Personel?.rank || "N/A",
       "Phone Number": member.phone,
       Email: member.email,
       SVN: member.service_number || "N/A",

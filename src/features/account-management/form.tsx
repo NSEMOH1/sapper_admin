@@ -158,7 +158,7 @@ export default function AdminUserForm() {
                             placeholder="Select role"
                         >
                             <option value="ADMIN">Admin</option>
-                            <option value="SUPER_ADMIN">Super Admin</option>
+                            <option value="STAFF">Staff</option>
                         </Select>
                         <FormErrorMessage>{errors.role}</FormErrorMessage>
                     </FormControl>

@@ -1,7 +1,6 @@
 export const UserRole = {
   STAFF: "STAFF",
   ADMIN: "ADMIN",
-  SUPER_ADMIN: "SUPER_ADMIN",
 } as const;
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole];
@@ -39,6 +38,28 @@ export interface Loan {
 
 export interface LoansResponse {
   result: Loan[];
+}
+
+export interface SavingsResponse {
+  savings: any;
+  result: Savings[];
+}
+
+export interface Savings {
+  id: string | number;
+  category: {
+    name: string;
+  };
+  status: string
+  amount: string;
+  createdAt: string;
+  member: {
+    first_name: string;
+    last_name: string;
+    email: string
+    phone: string
+  };
+  reference: string;
 }
 
 export interface ChartData {

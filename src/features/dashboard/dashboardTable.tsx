@@ -3,90 +3,7 @@ import DataTable from "../../components/table";
 import type { Member, TableColumn } from "../../lib/types";
 import { useMemo, useState, useEffect } from "react";
 import UserDetailsView from "./userDetails";
-
-const dummyMembers: Member[] = [
-  {
-    id: 1,
-    email: "john.doe@example.com",
-    first_name: "John",
-    title: "Mr",
-    last_name: "Doe",
-    other_name: "Michael",
-    gender: "Male",
-    phone: "08012345678",
-    address: "123 Broad Street, Lagos",
-    state_of_origin: "Lagos",
-    role: "Member",
-    type: "Regular",
-    lga: "Ikeja",
-    date_of_birth: "1990-05-20",
-    created_at: "2024-01-01T10:00:00Z",
-    updated_at: "2024-01-15T12:30:00Z",
-    profile_picture: "https://via.placeholder.com/150",
-    totalSavings: 50000,
-    monthlyDeduction: 5000,
-    service_number: "NAF2022",
-    status: "APPROVED",
-    Personel: {
-      rank: "Captain",
-    },
-    bank: [{ account_number: "1234567890", name: "GTBank" }],
-  },
-  {
-    id: 2,
-    email: "jane.smith@example.com",
-    first_name: "Jane",
-    title: "Mrs",
-    last_name: "Smith",
-    other_name: "Elizabeth",
-    gender: "Female",
-    phone: "08087654321",
-    address: "456 Marina Road, Abuja",
-    state_of_origin: "Abuja",
-    role: "Staff",
-    type: "Executive",
-    lga: "Garki",
-    date_of_birth: "1985-08-12",
-    created_at: "2024-02-10T09:00:00Z",
-    updated_at: "2024-03-01T14:00:00Z",
-    profile_picture: "https://via.placeholder.com/150",
-    totalSavings: 30000,
-    monthlyDeduction: 4000,
-    service_number: "NAF2024",
-    status: "PENDING",
-    Personel: {
-      rank: "Lieutenant",
-    },
-    bank: [{ account_number: "9876543210", name: "Access Bank" }],
-  },
-  {
-    id: 3,
-    email: "mark.johnson@example.com",
-    first_name: "Mark",
-    title: "Mr",
-    last_name: "Johnson",
-    other_name: "David",
-    gender: "Male",
-    phone: "08099887766",
-    address: "789 Kingsway Road, Port Harcourt",
-    state_of_origin: "Rivers",
-    role: "Admin",
-    type: "Regular",
-    lga: "Obio-Akpor",
-    date_of_birth: "1992-11-03",
-    created_at: "2024-04-05T11:30:00Z",
-    updated_at: "2024-04-10T16:20:00Z",
-    profile_picture: "https://via.placeholder.com/150",
-    totalSavings: 70000,
-    monthlyDeduction: 6000,
-    service_number: "NAF2074",
-    status: "REJECTED",
-    Personel: {
-      rank: "Major",
-    },
-    bank: [{ account_number: "1122334455", name: "UBA" }],
-  },
-];
+import { useMembersData } from "../../hooks/useMember";
 
 const userColumns: TableColumn<Member>[] = [
   {
@@ -173,15 +90,7 @@ export default function DashboardTable() {
     limit: 10,
   });
 
-  // 🔹 Local state instead of API
-  const [members, setMembers] = useState<Member[]>(dummyMembers);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 10,
-    total: dummyMembers.length,
-  });
+  const { members, loading, error, pagination, loadMembers } = useMembersData();
 
   const handleRowClick = (record: Member) => {
     setSelectedMember(record);
@@ -189,31 +98,6 @@ export default function DashboardTable() {
 
   const handleBackToList = () => {
     setSelectedMember(null);
-  };
-
-  const loadMembers = ({
-    page,
-    limit,
-    status,
-  }: {
-    page: number;
-    limit: number;
-    status?: "APPROVED" | "PENDING" | "REJECTED";
-  }) => {
-    setLoading(true);
-    setTimeout(() => {
-      let filtered = dummyMembers;
-      if (status) {
-        filtered = dummyMembers.filter((m) => m.status === status);
-      }
-      setMembers(filtered);
-      setPagination({
-        page,
-        limit,
-        total: filtered.length,
-      });
-      setLoading(false);
-    }, 500); // simulate network delay
   };
 
   const handleFilterClick = (filter: string) => {
@@ -279,7 +163,7 @@ export default function DashboardTable() {
   const buttonsWithCounts = buttons.map((button) => ({
     ...button,
     name: `${button.name} (${
-      statusCounts[button.filter as keyof typeof statusCounts] ?? 0
+      statusCounts[button.filter as keyof typeof statusCounts]
     })`,
   }));
 

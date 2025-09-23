@@ -211,8 +211,8 @@ const SideBar = ({ children }: { children: ReactNode }) => {
           </div>
         </div>
         <div className="flex flex-col justify-center items-center mt-5 mb-5">
-          <Avatar size="xl" src={oluyedeIcon} />
-          <p className="pt-4 text-white font-semibold">O.Oluyede</p>
+          <Avatar size="xl" src={user?.full_name} name={user?.full_name} bg='green.300' />
+          <p className="pt-4 text-white font-semibold">{user?.full_name}</p>
           <p className="text-white font-thin">Member</p>
         </div>
 

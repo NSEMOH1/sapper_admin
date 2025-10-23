@@ -2,7 +2,6 @@ import { Avatar, Badge, Button, Toast } from "@chakra-ui/react";
 import DataTable from "../../components/table";
 import { useMemo, useState, useEffect } from "react";
 import { fetchLoans } from "../../api/loan";
-import userIcon from "../../assets/oluyede.png"
 import type { Loan, TableColumn } from "../../lib/types";
 import LoanDetailsView from "./details";
 import Loader from "../../components/loader";
@@ -20,7 +19,7 @@ const loanColumns: TableColumn<Loan>[] = [
         key: 'member',
         render: (member: any) => (
             <span className="font-semibold flex items-center gap-2">
-                <Avatar src={userIcon} size='sm' />
+                <Avatar src={member.first_name} size='sm' />
                 {`${member?.first_name} ${member.last_name}` || 'N/A'}
             </span>
         ),

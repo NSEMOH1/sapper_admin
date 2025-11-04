@@ -102,6 +102,7 @@ export interface Member {
   title: string;
   last_name: string;
   other_name: string;
+  rank: string;
   gender: string;
   phone: string;
   address: string;

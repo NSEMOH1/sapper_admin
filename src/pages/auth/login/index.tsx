@@ -96,7 +96,7 @@ const Login = () => {
                     <FormControl fontWeight='light' className="mt-4 mb-3">
                         <div className="flex justify-between">
                             <FormLabel fontWeight='light' fontSize={13} className="text-white">Password</FormLabel>
-                            <p className="text-[#ECF15E] cursor-pointer">Forgot Password?</p>
+                            {/* <p className="text-[#ECF15E] cursor-pointer">Forgot Password?</p> */}
                         </div>
                         <InputGroup>
                             <InputLeftElement pointerEvents='none'>

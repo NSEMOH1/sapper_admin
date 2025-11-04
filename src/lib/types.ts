@@ -19,9 +19,14 @@ export interface Loan {
   endDate: string | null;
   createdAt: string;
   updatedAt: string;
+  servicingLoan: string;
+  nonIndebtedness: string;
+  application: string;
+  recommendation: string;
   member: {
     first_name: string;
     last_name: string;
+    service_number: string;
   };
   reference: string;
   approvedBy: {

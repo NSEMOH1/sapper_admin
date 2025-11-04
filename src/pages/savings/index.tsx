@@ -1,4 +1,4 @@
-import { Avatar, Badge, Card, CardBody } from "@chakra-ui/react";
+import { Avatar, Badge, Card, CardBody, Text } from "@chakra-ui/react";
 import DataTable from "../../components/table";
 import { useEffect, useState } from "react";
 import { LibraryBig, TrendingUpDownIcon } from "lucide-react";
@@ -9,11 +9,13 @@ import Loader from "../../components/loader";
 interface FormattedSavings {
   id: string | number;
   name: string;
-  serviceNumber: string;
+  reference: string;
   email: string;
   phone: string;
   savingsType: string;
   amount: number;
+  createdAt: string;
+  date: string;
 }
 
 const Savings = () => {
@@ -33,14 +35,27 @@ const Savings = () => {
             `${saving.member?.first_name || ""} ${
               saving.member?.last_name || ""
             }`.trim() || "N/A",
-          serviceNumber: saving.reference || "N/A",
+          reference: saving.reference || "N/A",
           email: saving.member?.email || "N/A",
           phone: saving.member?.phone || "N/A",
           savingsType: saving.category?.name || "Normal",
           amount: parseFloat(saving.amount) || 0,
+          createdAt: saving.createdAt || new Date().toISOString(),
+          date: saving.createdAt
+            ? new Date(saving.createdAt).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })
+            : "N/A",
         }));
 
-        setSavings(formattedSavings);
+        const sortedSavings = formattedSavings.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+
+        setSavings(sortedSavings);
         setTotalAmount(response.total || 0);
       } catch (error) {
         console.error("Error fetching savings:", error);
@@ -73,9 +88,9 @@ const Savings = () => {
       ),
     },
     {
-      title: "Service Number",
-      dataIndex: "serviceNumber" as const,
-      key: "serviceNumber",
+      title: "Reference",
+      dataIndex: "reference" as const,
+      key: "reference",
     },
     {
       title: "Email",
@@ -107,8 +122,22 @@ const Savings = () => {
       dataIndex: "amount" as const,
       key: "amount",
       render: (amount: number) => (
-        <span className="font-semibold">₦{amount.toLocaleString()}</span>
+        <Text
+          fontWeight="semibold"
+          color={amount < 0 ? "red.500" : "green.500"}
+        >
+          ₦{Math.abs(amount).toLocaleString()}
+          {amount < 0 && " (Debit)"}
+        </Text>
       ),
+    },
+    {
+      title: "Date",
+      dataIndex: "date" as const,
+      key: "date",
+      sorter: (a: FormattedSavings, b: FormattedSavings) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      defaultSortOrder: "descend" as const,
     },
   ];
 

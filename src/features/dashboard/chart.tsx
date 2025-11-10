@@ -45,7 +45,7 @@ const processLoanDataForChart = (loans: Loan[]): ChartData[] => {
       const monthData = chartData[monthIndex];
 
       switch (loan.status) {
-        case "APPROVED":
+        case "ACTIVE":
         case "DISBURSED":
           monthData.approved++;
           break;
@@ -53,7 +53,6 @@ const processLoanDataForChart = (loans: Loan[]): ChartData[] => {
           monthData.rejected++;
           break;
         case "PENDING":
-        case "PENDING_VERIFICATION":
           monthData.pending++;
           break;
       }

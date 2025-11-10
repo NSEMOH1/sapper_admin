@@ -120,7 +120,7 @@ const loanColumns: TableColumn<Loan>[] = [
 const buttons = [
   { name: "All Loans", filter: "all" },
   { name: "Approved Loan", filter: "APPROVED" },
-  { name: "Disbursed Loan", filter: "DISBURSED" },
+  { name: "Disbursed Loan", filter: "ACTIVE" },
   { name: "Pending Approval", filter: "PENDING" },
   { name: "Rejected Loan Request", filter: "REJECTED" },
 ];
@@ -173,7 +173,7 @@ export default function LoanTable() {
     const pending = loans.filter((loan) => loan.status === "PENDING").length;
     const rejected = loans.filter((loan) => loan.status === "REJECTED").length;
     const disbursed = loans.filter(
-      (loan) => loan.status === "DISBURSED"
+      (loan) => loan.status === "ACTIVE"
     ).length;
 
     return {

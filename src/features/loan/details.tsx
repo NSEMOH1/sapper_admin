@@ -199,13 +199,11 @@ const LoanDetailsView = ({ data }: any) => {
         </div>
 
         <div className="flex gap-5 mt-8">
-          {data.status === "REJECTED" ? (
-            <></>
-          ) : (
+          {data.status === "PENDING" && (
             <>
               <Button
                 isLoading={loading}
-                w={"30%"}
+                w="30%"
                 colorScheme="green"
                 onClick={handleApprove}
               >
@@ -213,7 +211,7 @@ const LoanDetailsView = ({ data }: any) => {
               </Button>
               <Button
                 isLoading={loading}
-                w={"30%"}
+                w="30%"
                 colorScheme="red"
                 onClick={handleReject}
               >
@@ -221,22 +219,22 @@ const LoanDetailsView = ({ data }: any) => {
               </Button>
             </>
           )}
-        </div>
 
-        <div className="flex gap-5 mt-8">
-          {data.status === "APPPROVED" ? (
-            <>
-              <Button
-                isLoading={loading}
-                w={"30%"}
-                colorScheme="green"
-                onClick={handleDisburse}
-              >
-                Disburse
-              </Button>
-            </>
-          ) : (
-            <></>
+          {data.status === "APPROVED" && (
+            <Button
+              isLoading={loading}
+              w="30%"
+              colorScheme="blue"
+              onClick={handleDisburse}
+            >
+              Disburse
+            </Button>
+          )}
+
+          {data.status === "REJECTED" && (
+            <Text color="red.500" fontStyle="italic">
+              This loan application has been rejected
+            </Text>
           )}
         </div>
       </div>

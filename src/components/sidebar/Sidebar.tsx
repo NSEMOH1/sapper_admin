@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import { Layout, Menu } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import "./sidebar.css";
-import oluyedeIcon from "../../assets/oluyede.png";
 import { useResponsive } from "../../hooks/useResponsive";
 import { MobileHeader } from "../header/MobileHeader";
 import { RightCircleTwoTone } from "@ant-design/icons";
@@ -13,12 +12,12 @@ import {
   Columns3Cog,
   CircleAlert,
   GitMerge,
-  BellDot,
   CircleDollarSign,
   CloudUpload,
   BanknoteArrowUp,
   Users2,
   Banknote,
+  PiggyBank,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { Logo } from "../icons/logo";
@@ -71,6 +70,13 @@ const SideBar = ({ children }: { children: ReactNode }) => {
         <Banknote color="white" className={`${collapsed ? "!mt-2" : ""}`} />
       ),
       label: "Savings",
+    },
+     {
+      key: "/withdrawal",
+      icon: (
+        <PiggyBank color="white" className={`${collapsed ? "!mt-2" : ""}`} />
+      ),
+      label: "Withdrawal",
     },
     {
       key: "/loan",

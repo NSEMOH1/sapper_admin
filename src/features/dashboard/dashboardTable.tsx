@@ -25,11 +25,8 @@ const userColumns: TableColumn<Member>[] = [
   },
   {
     title: "Rank",
-    dataIndex: "Personel",
+    dataIndex: "rank",
     key: "rank",
-    render: (personel: { rank: string }) => (
-      <span>{personel?.rank || "N/A"}</span>
-    ),
   },
   {
     title: "Phone Number",

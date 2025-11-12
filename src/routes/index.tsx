@@ -28,6 +28,7 @@ const IPPIS = lazy(() => import("../pages/report/ippis/index.tsx"));
 const LoanRepaymentReport = lazy(
   () => import("../pages/report/repayment/index.tsx")
 );
+const Withdrawal = lazy(() => import("../pages/withdrawal/index.tsx"))
 const Savings = lazy(() => import("../pages/savings/index.tsx"));
 const Unauthorized = lazy(() => import("../pages/unauthorized/index.tsx"));
 
@@ -40,6 +41,7 @@ const ROUTE_PERMISSIONS = {
   uploads: [UserRole.STAFF, UserRole.ADMIN],
   accountmanagement: [UserRole.ADMIN],
   report: [UserRole.ADMIN],
+  withdrawal: [UserRole.ADMIN],
   savings: [UserRole.ADMIN],
 };
 
@@ -103,6 +105,14 @@ export const sappersRoutes = () => {
         element={
           <ProtectedRoute allowedRoles={ROUTE_PERMISSIONS.accountmanagement}>
             <AccountManagement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path={routes.withdrawal.index}
+        element={
+          <ProtectedRoute allowedRoles={ROUTE_PERMISSIONS.withdrawal}>
+            <Withdrawal />
           </ProtectedRoute>
         }
       />

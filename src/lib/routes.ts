@@ -39,7 +39,10 @@ export const routes = {
     ippis: "/report/ippis",
     repayment: "/report/repayment",
   },
+  withdrawal: {
+    index: "/withdrawal",
+  },
   savings: {
-    index: "/savings"
-  }
+    index: "/savings",
+  },
 };

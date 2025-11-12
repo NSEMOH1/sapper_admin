@@ -22,7 +22,7 @@ export default function LoanCards() {
 
                 const stats = {
                     disbursed: loans.filter((loan: { status: string; }) => loan.status === 'DISBURSED').length,
-                    approved: loans.filter((loan: { status: string; }) => loan.status === 'APPROVED').length,
+                    approved: loans.filter((loan: { status: string; }) => loan.status === 'ACTIVE').length,
                     rejected: loans.filter((loan: { status: string; }) => loan.status === 'REJECTED').length,
                     pending: loans.filter((loan: { status: string; }) => loan.status === 'PENDING').length,
                     total: loans.length

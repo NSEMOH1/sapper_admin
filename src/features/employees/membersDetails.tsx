@@ -16,49 +16,46 @@ import {
   Thead,
   Tr,
   useDisclosure,
-  useToast,
 } from "@chakra-ui/react";
 import type { Member } from "../../lib/types";
 import {
-  Ban,
   BookUser,
   Home,
   Mail,
   PhoneIncoming,
   ShieldHalf,
-  Tag,
   User,
   X,
 } from "lucide-react";
 import ActionModal from "../../components/actionModal";
-import LoanBalanceDashboard from "./loan-balance";
-import api from "../../api";
+// import LoanBalanceDashboard from "./loan-balance";
+// import api from "../../api";
 import { useState } from "react";
 export default function MemberDetailsView({ data }: { data: Member }) {
-  const toast = useToast();
-  const [savingsHistory, setSavingsHistory] = useState<any[]>([]);
-  const [loanHistory, setLoanHistory] = useState<any[]>([]);
+  // const toast = useToast();
+  const [savingsHistory, _setSavingsHistory] = useState<any[]>([]);
+  const [loanHistory, _setLoanHistory] = useState<any[]>([]);
   const {
     isOpen: isAcceptOpen,
-    onOpen: onAcceptOpen,
+    onOpen: _onAcceptOpen,
     onClose: onAcceptClose,
   } = useDisclosure();
 
   const {
     isOpen: isRejectOpen,
-    onOpen: onRejectOpen,
+    onOpen: _onRejectOpen,
     onClose: onRejectClose,
   } = useDisclosure();
 
   const {
     isOpen: isSavingsOpen,
-    onOpen: onSavingsOpen,
+    onOpen: _onSavingsOpen,
     onClose: onSavingsClose,
   } = useDisclosure();
 
   const {
     isOpen: isLoansOpen,
-    onOpen: onLoansOpen,
+    onOpen: _onLoansOpen,
     onClose: onLoansClose,
   } = useDisclosure();
 
@@ -68,33 +65,33 @@ export default function MemberDetailsView({ data }: { data: Member }) {
   //   onClose: onStatementClose,
   // } = useDisclosure();
 
-  const fetchSavingsHistory = async () => {
-    try {
-      const response = await api.get(`/api/members/${data.id}/savings`);
-      setSavingsHistory(response.data);
-      onSavingsOpen();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to fetch savings history",
-        status: "error",
-      });
-    }
-  };
+  // const fetchSavingsHistory = async () => {
+  //   try {
+  //     const response = await api.get(`/api/members/${data.id}/savings`);
+  //     setSavingsHistory(response.data);
+  //     onSavingsOpen();
+  //   } catch (error) {
+  //     toast({
+  //       title: "Error",
+  //       description: "Failed to fetch savings history",
+  //       status: "error",
+  //     });
+  //   }
+  // };
 
-  const fetchLoanHistory = async () => {
-    try {
-      const response = await api.get(`/api/members/${data.id}/loans`);
-      setLoanHistory(response.data);
-      onLoansOpen();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to fetch loan history",
-        status: "error",
-      });
-    }
-  };
+  // const fetchLoanHistory = async () => {
+  //   try {
+  //     const response = await api.get(`/api/members/${data.id}/loans`);
+  //     setLoanHistory(response.data);
+  //     onLoansOpen();
+  //   } catch (error) {
+  //     toast({
+  //       title: "Error",
+  //       description: "Failed to fetch loan history",
+  //       status: "error",
+  //     });
+  //   }
+  // };
 
   // const handleAccept = async () => {
   //     try {

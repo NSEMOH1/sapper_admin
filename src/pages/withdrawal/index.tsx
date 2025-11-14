@@ -208,7 +208,7 @@ const Withdrawals = () => {
   const columns = [
     {
       title: "Reference",
-      dataIndex: "reference",
+      dataIndex: "reference" as const,
       key: "reference",
       render: (value: any) => (
         <div className="text-sm font-medium text-gray-900">
@@ -218,7 +218,7 @@ const Withdrawals = () => {
     },
     {
       title: "Member",
-      dataIndex: "member",
+      dataIndex: "member" as const,
       key: "member",
       render: (value: any) => {
         if (!value) return <div className="text-sm text-gray-500">N/A</div>;
@@ -235,7 +235,7 @@ const Withdrawals = () => {
     },
     {
       title: "Amount",
-      dataIndex: "amount",
+      dataIndex: "amount" as const,
       key: "amount",
       render: (value: any) => (
         <div className="text-sm font-bold text-gray-900">
@@ -245,7 +245,7 @@ const Withdrawals = () => {
     },
     {
       title: "Category",
-      dataIndex: "category",
+      dataIndex: "category" as const,
       key: "category",
       render: (value: any) => {
         if (!value) return <div className="text-sm text-gray-500">N/A</div>;
@@ -256,14 +256,14 @@ const Withdrawals = () => {
     },
     {
       title: "Status",
-      dataIndex: "status",
+      dataIndex: "status" as const,
       key: "status",
       render: (value: any) =>
         value ? getStatusBadge(value) : <span>N/A</span>,
     },
     {
       title: "Date",
-      dataIndex: "requestedAt",
+      dataIndex: "requestedAt" as const,
       key: "requestedAt",
       render: (value: any) => (
         <div className="text-sm text-gray-900">{formatDate(value)}</div>

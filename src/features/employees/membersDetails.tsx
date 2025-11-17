@@ -3,6 +3,10 @@ import {
   Badge,
   Box,
   Button,
+  FormControl,
+  FormLabel,
+  HStack,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -16,6 +20,8 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
+  VStack,
 } from "@chakra-ui/react";
 import type { Member } from "../../lib/types";
 import {
@@ -28,13 +34,17 @@ import {
   X,
 } from "lucide-react";
 import ActionModal from "../../components/actionModal";
-// import LoanBalanceDashboard from "./loan-balance";
-// import api from "../../api";
 import { useState } from "react";
+import api from "../../api";
 export default function MemberDetailsView({ data }: { data: Member }) {
-  // const toast = useToast();
-  const [savingsHistory, _setSavingsHistory] = useState<any[]>([]);
-  const [loanHistory, _setLoanHistory] = useState<any[]>([]);
+  const toast = useToast();
+  const [savingsHistory, setSavingsHistory] = useState<any[]>([]);
+  const [loanHistory, setLoanHistory] = useState<any[]>([]);
+  const [updateData, setUpdateData] = useState({
+    loan_balance: "",
+    savings_balance: "",
+  });
+  const [isUpdating, setIsUpdating] = useState(false);
   const {
     isOpen: isAcceptOpen,
     onOpen: _onAcceptOpen,
@@ -49,49 +59,100 @@ export default function MemberDetailsView({ data }: { data: Member }) {
 
   const {
     isOpen: isSavingsOpen,
-    onOpen: _onSavingsOpen,
+    onOpen: onSavingsOpen,
     onClose: onSavingsClose,
   } = useDisclosure();
 
   const {
     isOpen: isLoansOpen,
-    onOpen: _onLoansOpen,
+    onOpen: onLoansOpen,
     onClose: onLoansClose,
   } = useDisclosure();
 
-  // const {
-  //   isOpen: isStatementOpen,
-  //   onOpen: onStatementOpen,
-  //   onClose: onStatementClose,
-  // } = useDisclosure();
+  const {
+    isOpen: isUpdateBalanceOpen,
+    onOpen: onUpdateBalanceOpen,
+    onClose: onUpdateBalanceClose,
+  } = useDisclosure();
 
-  // const fetchSavingsHistory = async () => {
-  //   try {
-  //     const response = await api.get(`/api/members/${data.id}/savings`);
-  //     setSavingsHistory(response.data);
-  //     onSavingsOpen();
-  //   } catch (error) {
-  //     toast({
-  //       title: "Error",
-  //       description: "Failed to fetch savings history",
-  //       status: "error",
-  //     });
-  //   }
-  // };
+  const fetchSavingsHistory = async () => {
+    try {
+      const response = await api.get(`/api/members/${data.id}/savings`);
+      setSavingsHistory(response.data);
+      onSavingsOpen();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch savings history",
+        status: "error",
+      });
+    }
+  };
 
-  // const fetchLoanHistory = async () => {
-  //   try {
-  //     const response = await api.get(`/api/members/${data.id}/loans`);
-  //     setLoanHistory(response.data);
-  //     onLoansOpen();
-  //   } catch (error) {
-  //     toast({
-  //       title: "Error",
-  //       description: "Failed to fetch loan history",
-  //       status: "error",
-  //     });
-  //   }
-  // };
+  const fetchLoanHistory = async () => {
+    try {
+      const response = await api.get(`/api/members/${data.id}/loans`);
+      setLoanHistory(response.data);
+      onLoansOpen();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch loan history",
+        status: "error",
+      });
+    }
+  };
+
+  const handleUpdateBalance = async () => {
+    if (!updateData.loan_balance && !updateData.savings_balance) {
+      toast({
+        title: "Error",
+        description: "Please enter at least one balance to update",
+        status: "error",
+      });
+      return;
+    }
+
+    setIsUpdating(true);
+    try {
+      const payload: any = {};
+      if (updateData.loan_balance) {
+        payload.loan_balance = parseFloat(updateData.loan_balance);
+      }
+      if (updateData.savings_balance) {
+        payload.savings_balance = parseFloat(updateData.savings_balance);
+      }
+
+      await api.patch(`/api/balances/${data.id}`, payload);
+
+      toast({
+        title: "Success",
+        description: "Member balances updated successfully",
+        status: "success",
+      });
+
+      setUpdateData({ loan_balance: "", savings_balance: "" });
+      onUpdateBalanceClose();
+      window.location.reload();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.response?.data?.error || "Failed to update balances",
+        status: "error",
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+      setUpdateData((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+    }
+  };
 
   // const handleAccept = async () => {
   //     try {
@@ -171,7 +232,7 @@ export default function MemberDetailsView({ data }: { data: Member }) {
                       </p>
                       <p className="flex items-center gap-2">
                         <ShieldHalf size={10} />
-                        {data.Personel?.rank}
+                        {data.rank}
                       </p>
                       <p className="flex items-center gap-2">
                         <BookUser size={10} />
@@ -212,7 +273,6 @@ export default function MemberDetailsView({ data }: { data: Member }) {
                       />
                       <p className="font-bold pt-4 text-center">{`${data.first_name} ${data.last_name}`}</p>
                     </div>
-                    {/* <LoanBalanceDashboard /> */}
                     {/* <div className="mt-4 mb-4 mr-2">
                                             {data.status === 'PENDING' && (
                                                 <div className="flex gap-6 mt">
@@ -263,23 +323,26 @@ export default function MemberDetailsView({ data }: { data: Member }) {
                                         </div> */}
                   </div>
                 </div>
-                {/* <div className="bg-[#556308] p-1">
+                <div className="bg-[#556308] p-1">
                   <p className="text-white">Quick links</p>
                 </div>
-                <div className="grid grid-cols-3 gap-2 px-2 text-[#556308] py-2">
-                  <p
+                <div className="grid grid-cols-3 gap-2 px-4 py-6 text-[#556308]">
+                  {/* <p
                     className="underline cursor-pointer"
                     onClick={onStatementOpen}
                   >
                     View Account Statement
-                  </p>
+                  </p> */}
                   <p
                     className="underline cursor-pointer"
                     onClick={fetchSavingsHistory}
                   >
                     View Savings History
                   </p>
-                  <p className="underline cursor-pointer">
+                  <p
+                    className="underline cursor-pointer"
+                    onClick={onUpdateBalanceOpen}
+                  >
                     Update Member Balance
                   </p>
                   <p
@@ -288,15 +351,14 @@ export default function MemberDetailsView({ data }: { data: Member }) {
                   >
                     View Loan History
                   </p>
-                  <p className="underline cursor-pointer">Download</p>
-                </div> */}
+                  {/* <p className="underline cursor-pointer">Download</p> */}
+                </div>
               </div>
             </div>
           </div>
         </Box>
       </div>
 
-      {/* Savings History Modal */}
       <Modal isOpen={isSavingsOpen} onClose={onSavingsClose} size="5xl">
         <ModalOverlay />
         <ModalContent>
@@ -387,11 +449,9 @@ export default function MemberDetailsView({ data }: { data: Member }) {
                 <Thead bg="gray.100">
                   <Tr>
                     <Th>Reference</Th>
-                    <Th>Amount</Th>
                     <Th>Account Number</Th>
                     <Th>Status</Th>
                     <Th>Date</Th>
-                    <Th>Actions</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -399,16 +459,18 @@ export default function MemberDetailsView({ data }: { data: Member }) {
                     <Tr key={loan.id}>
                       <Td fontWeight="semibold">{loan.reference}</Td>
                       <Td>
-                        {parseFloat(loan.amount).toLocaleString("en-NG", {
-                          style: "currency",
-                          currency: "NGN",
-                        })}
+                        {parseFloat(loan.approvedAmount).toLocaleString(
+                          "en-NG",
+                          {
+                            style: "currency",
+                            currency: "NGN",
+                          }
+                        )}
                       </Td>
-                      <Td>{loan.accountNumber || "N/A"}</Td>
                       <Td>
                         <Badge
                           colorScheme={
-                            loan.status === "APPROVED"
+                            loan.status === "ACTIVE"
                               ? "green"
                               : loan.status === "REJECTED"
                               ? "red"
@@ -422,23 +484,64 @@ export default function MemberDetailsView({ data }: { data: Member }) {
                         </Badge>
                       </Td>
                       <Td>{new Date(loan.createdAt).toLocaleDateString()}</Td>
-                      <Td>
-                        <Button
-                          size="sm"
-                          colorScheme="blue"
-                          onClick={() => {
-                            // Add your view details handler here
-                            console.log("View details for loan:", loan.id);
-                          }}
-                        >
-                          View
-                        </Button>
-                      </Td>
                     </Tr>
                   ))}
                 </Tbody>
               </Table>
             </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={isUpdateBalanceOpen}
+        onClose={onUpdateBalanceClose}
+        size="md"
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Update Member Balance</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <VStack spacing={4}>
+              <FormControl>
+                <FormLabel>Loan Balance (₦)</FormLabel>
+                <Input
+                  type="text"
+                  placeholder="Enter new loan balance"
+                  value={updateData.loan_balance}
+                  onChange={(e) =>
+                    handleInputChange("loan_balance", e.target.value)
+                  }
+                />
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>Savings Balance (₦)</FormLabel>
+                <Input
+                  type="text"
+                  placeholder="Enter new savings balance"
+                  value={updateData.savings_balance}
+                  onChange={(e) =>
+                    handleInputChange("savings_balance", e.target.value)
+                  }
+                />
+              </FormControl>
+
+              <HStack spacing={3} width="full" justifyContent="flex-end">
+                <Button onClick={onUpdateBalanceClose} variant="outline">
+                  Cancel
+                </Button>
+                <Button
+                  colorScheme="blue"
+                  onClick={handleUpdateBalance}
+                  isLoading={isUpdating}
+                  loadingText="Updating..."
+                >
+                  Update Balances
+                </Button>
+              </HStack>
+            </VStack>
           </ModalBody>
         </ModalContent>
       </Modal>

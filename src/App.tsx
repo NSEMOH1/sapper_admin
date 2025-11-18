@@ -17,7 +17,10 @@ const router = createBrowserRouter(
       <Route element={<MainLayout />}>{sappersRoutes()}</Route>
       <Route path="/" element={<Navigate to="/login" replace />} />
     </Route>
-  )
+  ),
+  {
+    basename: "/admin"   // 👈 VERY IMPORTANT
+  }
 );
 
 function App() {
